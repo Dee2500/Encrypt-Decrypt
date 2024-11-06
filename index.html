@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Encryption and Decryption Tool</title>
+  <!-- Include CryptoJS library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1-crypto-js.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f4f9;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .input-group {
+      margin-bottom: 15px;
+    }
+    .input-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .input-group input, .input-group textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .input-group button {
+      padding: 10px 15px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .input-group button:hover {
+      background-color: #45a049;
+    }
+    .output-box {
+      padding: 15px;
+      background-color: #f1f1f1;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-top: 20px;
+      min-height: 50px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Encryption and Decryption Tool</h1>
+
+  <!-- Message and Password Inputs -->
+  <div class="input-group">
+    <label for="message">Enter Message to Encrypt:</label>
+    <textarea id="message" rows="4"></textarea>
+  </div>
+
+  <div class="input-group">
+    <label for="password">Enter Password:</label>
+    <input type="password" id="password">
+  </div>
+
+  <!-- Encrypt and Decrypt Buttons -->
+  <div class="input-group">
+    <button onclick="encryptMessage()">Encrypt</button>
+    <button onclick="decryptMessage()">Decrypt</button>
+  </div>
+
+  <!-- Display Encrypted / Decrypted Message -->
+  <div class="output-box" id="outputBox"></div>
+</div>
+
+<script>
+  // Encrypt message function
+  function encryptMessage() {
+    let message = document.getElementById("message").value;
+    let password = document.getElementById("password").value;
+
+    // Check if message and password are entered
+    if (!message || !password) {
+      alert("Both message and password are required!");
+      return;
+    }
+
+    // Encrypt the message with AES encryption using the password
+    let encryptedMessage = CryptoJS.AES.encrypt(message, password).toString();
+
+    // Display the encrypted message in the output box
+    document.getElementById("outputBox").textContent = "Encrypted Message: \n" + encryptedMessage;
+  }
+
+  // Decrypt message function
+  function decryptMessage() {
+    let encryptedMessage = document.getElementById("message").value;  // Use message input for encrypted text
+    let password = document.getElementById("password").value;
+
+    // Check if encrypted message and password are entered
+    if (!encryptedMessage || !password) {
+      alert("Both encrypted message and password are required!");
+      return;
+    }
+
+    try {
+      // Decrypt the message using the password
+      let bytes = CryptoJS.AES.decrypt(encryptedMessage, password);
+      let decryptedMessage = bytes.toString(CryptoJS.enc.Utf8);
+
+      // Check if decryption is successful
+      if (!decryptedMessage) {
+        document.getElementById("outputBox").textContent = "Invalid password or corrupted message!";
+      } else {
+        // Display the decrypted message in the output box
+        document.getElementById("outputBox").textContent = "Decrypted Message: \n" + decryptedMessage;
+      }
+    } catch (e) {
+      document.getElementById("outputBox").textContent = "Error during decryption.";
+    }
+  }
+</script>
+
+</body>
+</html>
