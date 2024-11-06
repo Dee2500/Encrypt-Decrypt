@@ -1,9 +1,4 @@
-// Ensure that the CryptoJS library is available before using it
-if (typeof CryptoJS === "undefined") {
-  alert("CryptoJS library is not loaded. Encryption and decryption will not work.");
-}
-
-// Encrypt message function
+// Encrypt message function using Triple DES (3DES)
 function encryptMessage() {
   const message = document.getElementById("message").value;
   const password = document.getElementById("password").value;
@@ -14,9 +9,9 @@ function encryptMessage() {
     return;
   }
 
-  // Encrypt the message with AES encryption using the password
+  // Encrypt the message with Triple DES encryption using the password
   try {
-    let encryptedMessage = CryptoJS.AES.encrypt(message, password).toString();
+    let encryptedMessage = CryptoJS.TripleDES.encrypt(message, password).toString();
     document.getElementById("outputBox").textContent = "Encrypted Message: \n" + encryptedMessage;
   } catch (error) {
     console.error("Encryption failed:", error);
@@ -24,7 +19,7 @@ function encryptMessage() {
   }
 }
 
-// Decrypt message function
+// Decrypt message function using Triple DES (3DES)
 function decryptMessage() {
   const encryptedMessage = document.getElementById("message").value;  // Use message input for encrypted text
   const password = document.getElementById("password").value;
@@ -36,8 +31,8 @@ function decryptMessage() {
   }
 
   try {
-    // Decrypt the message using the password
-    let bytes = CryptoJS.AES.decrypt(encryptedMessage, password);
+    // Decrypt the message using Triple DES with the password
+    let bytes = CryptoJS.TripleDES.decrypt(encryptedMessage, password);
     let decryptedMessage = bytes.toString(CryptoJS.enc.Utf8);
 
     // Check if decryption is successful
