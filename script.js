@@ -1,7 +1,12 @@
+// Ensure that the CryptoJS library is available before using it
+if (typeof CryptoJS === "undefined") {
+  alert("CryptoJS library is not loaded. Encryption and decryption will not work.");
+}
+
 // Encrypt message function
 function encryptMessage() {
-  let message = document.getElementById("message").value;
-  let password = document.getElementById("password").value;
+  const message = document.getElementById("message").value;
+  const password = document.getElementById("password").value;
 
   // Check if message and password are entered
   if (!message || !password) {
@@ -10,16 +15,19 @@ function encryptMessage() {
   }
 
   // Encrypt the message with AES encryption using the password
-  let encryptedMessage = CryptoJS.AES.encrypt(message, password).toString();
-
-  // Display the encrypted message in the output box
-  document.getElementById("outputBox").textContent = "Encrypted Message: \n" + encryptedMessage;
+  try {
+    let encryptedMessage = CryptoJS.AES.encrypt(message, password).toString();
+    document.getElementById("outputBox").textContent = "Encrypted Message: \n" + encryptedMessage;
+  } catch (error) {
+    console.error("Encryption failed:", error);
+    alert("Error during encryption.");
+  }
 }
 
 // Decrypt message function
 function decryptMessage() {
-  let encryptedMessage = document.getElementById("message").value;  // Use message input for encrypted text
-  let password = document.getElementById("password").value;
+  const encryptedMessage = document.getElementById("message").value;  // Use message input for encrypted text
+  const password = document.getElementById("password").value;
 
   // Check if encrypted message and password are entered
   if (!encryptedMessage || !password) {
@@ -36,10 +44,14 @@ function decryptMessage() {
     if (!decryptedMessage) {
       document.getElementById("outputBox").textContent = "Invalid password or corrupted message!";
     } else {
-      // Display the decrypted message in the output box
       document.getElementById("outputBox").textContent = "Decrypted Message: \n" + decryptedMessage;
     }
-  } catch (e) {
-    document.getElementById("outputBox").textContent = "Error during decryption.";
+  } catch (error) {
+    console.error("Decryption failed:", error);
+    alert("Error during decryption.");
   }
 }
+
+// Set up event listeners for the buttons
+document.getElementById("encryptButton").addEventListener("click", encryptMessage);
+document.getElementById("decryptButton").addEventListener("click", decryptMessage);
